@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Marios Vottas — Data Scientist & AI Researcher</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #080c10;
+    --bg2: #0d1117;
+    --bg3: #111820;
+    --surface: #161d27;
+    --surface2: #1c2530;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --accent: #00d4aa;
+    --accent2: #0099ff;
+    --text: #e8edf2;
+    --muted: #6b7d8e;
+    --muted2: #8fa3b8;
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Syne', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 13px; line-height: 1.7; overflow-x: hidden; }
+
+  .scanlines { position: fixed; inset: 0; pointer-events: none; z-index: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px); }
+  .grid-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; background-image: linear-gradient(rgba(0,212,170,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,170,0.03) 1px, transparent 1px); background-size: 40px 40px; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(8,12,16,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+  .nav-logo { font-family: var(--display); font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: -0.5px; cursor: pointer; }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a { color: var(--muted2); text-decoration: none; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; cursor: pointer; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-status { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  main { position: relative; z-index: 1; }
+  section { padding: 5rem 2rem; max-width: 960px; margin: 0 auto; }
+
+  /* HERO */
+  #hero { min-height: 100vh; display: flex; align-items: center; padding-top: 56px; }
+  .hero-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; border: 1px solid rgba(0,212,170,0.2); padding: 4px 12px; border-radius: 2px; }
+  .hero-name { font-family: var(--display); font-size: clamp(44px, 7vw, 80px); font-weight: 800; line-height: 0.95; letter-spacing: -3px; color: var(--text); margin-bottom: 0.5rem; }
+  .hero-name span { color: var(--accent); }
+  .hero-role { font-family: var(--display); font-size: clamp(15px, 2.2vw, 21px); font-weight: 400; color: var(--muted2); margin-bottom: 2rem; }
+  .hero-desc { max-width: 540px; color: var(--muted2); font-size: 13px; line-height: 1.8; margin-bottom: 2.5rem; }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary { background: var(--accent); color: #080c10; border: none; padding: 10px 24px; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.05em; cursor: pointer; border-radius: 2px; transition: opacity 0.2s; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-cv { background: var(--accent); color: #080c10; border: none; padding: 10px 24px; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.05em; cursor: pointer; border-radius: 2px; transition: opacity 0.2s; text-decoration: none; display: inline-block; }
+  .btn-cv:hover { opacity: 0.95; }
+  .btn-ghost { background: transparent; color: var(--muted2); border: 1px solid var(--border2); padding: 10px 24px; font-family: var(--mono); font-size: 12px; cursor: pointer; border-radius: 2px; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .hero-metrics { display: flex; gap: 2.5rem; margin-top: 3.5rem; padding-top: 2.5rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
+  .metric-val { font-family: var(--display); font-size: 28px; font-weight: 700; color: var(--text); }
+  .metric-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* SECTION HEADERS */
+  .section-header { margin-bottom: 2.5rem; }
+  .section-tag { font-size: 11px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
+  .section-tag::after { content: ''; flex: 1; max-width: 60px; height: 1px; background: rgba(0,212,170,0.3); }
+  .section-title { font-family: var(--display); font-size: 32px; font-weight: 700; color: var(--text); letter-spacing: -1px; }
+
+  /* EXPERIENCE */
+  .exp-item { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 2px; transition: border-color 0.2s, background 0.2s; margin-bottom: 8px; }
+  .exp-item:hover { border-color: rgba(0,212,170,0.25); background: var(--surface2); }
+  .exp-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 10px; }
+  .exp-role { font-family: var(--display); font-size: 17px; font-weight: 600; color: var(--text); }
+  .exp-company { font-size: 12px; color: var(--accent); margin-top: 2px; }
+  .exp-date { font-size: 11px; color: var(--muted); white-space: nowrap; background: var(--bg3); padding: 3px 10px; border-radius: 2px; border: 1px solid var(--border); }
+  .exp-desc { color: var(--muted2); font-size: 12px; line-height: 1.7; }
+  .exp-desc ul { list-style: none; padding: 0; }
+  .exp-desc ul li { padding-left: 16px; position: relative; margin-bottom: 4px; }
+  .exp-desc ul li::before { content: '▸'; color: var(--accent); position: absolute; left: 0; }
+  .exp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .tag { font-size: 10px; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 2px; border: 1px solid rgba(0,212,170,0.2); color: rgba(0,212,170,0.8); text-transform: uppercase; }
+
+  /* SKILLS */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .skill-card { background: var(--surface); border: 1px solid var(--border); padding: 1.25rem; border-radius: 2px; transition: border-color 0.2s; }
+  .skill-card:hover { border-color: rgba(0,212,170,0.25); }
+  .skill-category { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 0.75rem; }
+  .skill-items { display: flex; flex-direction: column; gap: 8px; }
+  .skill-item { display: flex; align-items: center; justify-content: space-between; }
+  .skill-name { font-size: 12px; color: var(--muted2); }
+  .skill-bar { width: 80px; height: 2px; background: var(--surface2); border-radius: 1px; overflow: hidden; }
+  .skill-fill { height: 100%; background: var(--accent); border-radius: 1px; }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .project-card { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 2px; transition: border-color 0.2s; display: flex; flex-direction: column; }
+  .project-card:hover { border-color: rgba(0,212,170,0.25); }
+  .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .project-name { font-family: var(--display); font-size: 15px; font-weight: 600; color: var(--text); }
+  .project-link { font-size: 11px; color: var(--accent); text-decoration: none; border: 1px solid rgba(0,212,170,0.2); padding: 2px 8px; border-radius: 2px; transition: all 0.2s; white-space: nowrap; }
+  .project-link:hover { background: rgba(0,212,170,0.1); }
+  .project-desc { font-size: 12px; color: var(--muted2); line-height: 1.7; flex: 1; margin-bottom: 12px; }
+
+  /* EDUCATION */
+  .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .edu-card { background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; border-radius: 2px; transition: border-color 0.2s; }
+  .edu-card:hover { border-color: rgba(0,212,170,0.25); }
+  .edu-degree { font-family: var(--display); font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .edu-school { font-size: 12px; color: var(--accent); margin-bottom: 4px; }
+  .edu-year { font-size: 11px; color: var(--muted); }
+  .edu-note { font-size: 11px; color: var(--muted2); margin-top: 8px; border-top: 1px solid var(--border); padding-top: 8px; line-height: 1.6; }
+  .edu-badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 2px; background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.2); color: var(--accent); margin-top: 6px; }
+  .edu-link { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 2px; background: rgba(0,153,255,0.08); border: 1px solid rgba(0,153,255,0.2); color: #5bb8ff; margin-top: 6px; text-decoration: none; transition: background 0.2s; }
+  .edu-link:hover { background: rgba(0,153,255,0.15); }
+
+  /* RESEARCH */
+  .pub-card { background: var(--surface); border: 1px solid var(--border); padding: 1.25rem 1.5rem; border-radius: 2px; margin-bottom: 8px; transition: border-color 0.2s; }
+  .pub-card:hover { border-color: rgba(0,212,170,0.25); }
+  .pub-title { font-family: var(--display); font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; line-height: 1.4; }
+  .pub-authors { font-size: 11px; color: var(--accent); margin-bottom: 4px; }
+  .pub-venue { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  .pub-abstract { font-size: 12px; color: var(--muted2); line-height: 1.7; margin-bottom: 10px; }
+  .pub-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pub-btn { font-size: 10px; padding: 3px 10px; border-radius: 2px; text-decoration: none; border: 1px solid; transition: all 0.2s; letter-spacing: 0.05em; text-transform: uppercase; }
+  .pub-btn-doi { color: var(--accent); border-color: rgba(0,212,170,0.3); }
+  .pub-btn-doi:hover { background: rgba(0,212,170,0.1); }
+  .pub-btn-gh { color: #5bb8ff; border-color: rgba(0,153,255,0.3); }
+  .pub-btn-gh:hover { background: rgba(0,153,255,0.1); }
+  .pub-status { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 2px; background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.2); color: var(--accent); }
+
+  /* CERTIFICATIONS */
+  .cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+  .cert-card { background: var(--surface); border: 1px solid var(--border); padding: 1rem 1.25rem; border-radius: 2px; transition: border-color 0.2s; }
+  .cert-card:hover { border-color: rgba(0,212,170,0.2); }
+  .cert-name { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .cert-issuer { font-size: 11px; color: var(--accent); margin-bottom: 4px; }
+  .cert-meta { font-size: 10px; color: var(--muted); }
+  .cert-link { font-size: 10px; color: #5bb8ff; text-decoration: none; }
+  .cert-link:hover { text-decoration: underline; }
+
+  /* AI CHAT */
+  .chat-container { background: var(--bg2); border: 1px solid var(--border2); border-radius: 4px; overflow: hidden; }
+  .chat-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 10px; }
+  .chat-avatar { width: 32px; height: 32px; border-radius: 2px; background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.3); display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--accent); flex-shrink: 0; }
+  .chat-name { font-family: var(--display); font-size: 14px; font-weight: 600; color: var(--text); }
+  .chat-status { font-size: 11px; color: var(--accent); }
+  .suggested-chips { padding: 0.75rem 1rem; display: flex; flex-wrap: wrap; gap: 6px; border-bottom: 1px solid var(--border); background: var(--bg3); }
+  .chip { font-size: 11px; color: var(--muted2); border: 1px solid var(--border2); padding: 4px 10px; border-radius: 2px; cursor: pointer; background: var(--surface); transition: all 0.15s; white-space: nowrap; }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chat-messages { height: 360px; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+  .msg { display: flex; gap: 10px; }
+  .msg.user { justify-content: flex-end; }
+  .msg-bubble { max-width: 78%; padding: 10px 14px; font-size: 12px; line-height: 1.7; border-radius: 2px; }
+  .msg.bot .msg-bubble { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  .msg.user .msg-bubble { background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.25); color: var(--text); }
+  .msg-icon { width: 24px; height: 24px; border-radius: 2px; background: rgba(0,212,170,0.1); border: 1px solid rgba(0,212,170,0.2); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--accent); flex-shrink: 0; margin-top: 4px; }
+  .typing { display: flex; align-items: center; gap: 4px; padding: 10px 14px; }
+  .typing span { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); opacity: 0.4; animation: blink 1.2s infinite; }
+  .typing span:nth-child(2) { animation-delay: 0.2s; }
+  .typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes blink { 0%,80%,100%{opacity:0.4} 40%{opacity:1} }
+  .chat-input-area { border-top: 1px solid var(--border); padding: 0.75rem 1rem; display: flex; gap: 8px; align-items: center; background: var(--bg3); }
+  .chat-input { flex: 1; background: var(--surface); border: 1px solid var(--border2); color: var(--text); padding: 8px 12px; font-family: var(--mono); font-size: 12px; border-radius: 2px; outline: none; transition: border-color 0.2s; }
+  .chat-input:focus { border-color: rgba(0,212,170,0.5); }
+  .chat-input::placeholder { color: var(--muted); }
+  .chat-send { background: var(--accent); color: #080c10; border: none; padding: 8px 16px; font-family: var(--mono); font-size: 11px; font-weight: 500; cursor: pointer; border-radius: 2px; transition: opacity 0.2s; letter-spacing: 0.05em; }
+  .chat-send:hover { opacity: 0.85; }
+  .chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .contact-item { background: var(--surface); border: 1px solid var(--border); padding: 1.25rem; border-radius: 2px; text-align: center; transition: border-color 0.2s; text-decoration: none; display: block; }
+  .contact-item:hover { border-color: rgba(0,212,170,0.3); }
+  .contact-icon { font-size: 20px; color: var(--accent); margin-bottom: 8px; }
+  .contact-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 4px; }
+  .contact-val { font-size: 11px; color: var(--muted2); word-break: break-all; }
+
+  footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; font-size: 11px; color: var(--muted); position: relative; z-index: 1; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+
+  @media (max-width: 640px) {
+    nav { padding: 0 1rem; }
+    .nav-links { display: none; }
+    section { padding: 3.5rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="scanlines"></div>
+<div class="grid-bg"></div>
+
+<nav>
+  <div class="nav-logo" onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">MV_</div>
+  <div class="nav-links">
+    <a onclick="document.getElementById('hero').scrollIntoView({behavior:'smooth'})">about</a>
+    <a onclick="document.getElementById('experience').scrollIntoView({behavior:'smooth'})">experience</a>
+    <a onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">projects</a>
+    <a onclick="document.getElementById('research').scrollIntoView({behavior:'smooth'})">research</a>
+    <a onclick="document.getElementById('ai').scrollIntoView({behavior:'smooth'})">ai assistant</a>
+    <a onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">contact</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>open to opportunities</div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div>
+      <div class="hero-tag"><span>◈</span> Data Scientist · AI Researcher · MBA Candidate</div>
+      <div class="hero-name">Marios<br><span>Vottas</span></div>
+      <div class="hero-role">Bridging AI with real-world business impact.</div>
+      <p class="hero-desc">Data Scientist/AI Engineer specialising in NLP and Gen AI. Deployed Greece's first local zero-cost LLM in a IBM's CP4D. Published researcher at NCSR Demokritos. Currently pursuing a full-time MBA at the University of Piraeus — elected Vice-President of the class.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="document.getElementById('ai').scrollIntoView({behavior:'smooth'})">Talk to my AI ↓</button>
+        <a class="btn-ghost" href="https://www.linkedin.com/in/vottasmarios/" target="_blank">LinkedIn ↗</a>
+        <a class="btn-ghost" href="https://github.com/MariosVottas" target="_blank">GitHub ↗</a>
+        <a href="VottasCV.pdf" download class="btn-cv">Download CV</a>
+      </div>
+      <div class="hero-metrics">
+        <div><div class="metric-val">3+</div><div class="metric-label">Years in AI/DS</div></div>
+        <div><div class="metric-val">6+</div><div class="metric-label">AI Models in prod.</div></div>
+        <div><div class="metric-val">1st</div><div class="metric-label">Local LLM in GR banking</div></div>
+        <div><div class="metric-val">IEEE</div><div class="metric-label">Published — CBMS 2025</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-header">
+      <div class="section-tag">02 // experience</div>
+      <div class="section-title">Work History</div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">Data Scientist</div>
+          <div class="exp-company">Alpha Bank</div>
+        </div>
+        <div class="exp-date">Oct '23 – Present</div>
+      </div>
+      <div class="exp-desc">
+        <ul>
+          <li>Deployed Greece's first local zero-cost Llama-based LLM inside IBM's Cloud Pak for Data (CP4D) — a first-of-its-kind achievement in Greek banking. Allowed experimentation, development without cost and was the first step towards our team's focus on GenAI applications.</li>
+          <li>Designed and implemented an automated AI reporting system delivering weekly customer complaint insights to C-Level executives and quarterly reports to the Executive Committee (ExCo).</li>
+          <li>Developed 5 production-grade models currently used. Models used for sentiment analysis both with Neural Networks and GenAI, text summarization using LLMs, test classification utilizing a combination of Neural Networks, LLMs and business rules.</li>
+          <li>Migrated, automated and currently maintaining 20+ production-level ML models on cloud infrastructure.</li>
+          <li>Currently focusing in development of AI Agents using Microsoft's Copilot Studio.</li>
+        </ul>
+      </div>
+      <div class="exp-tags"><span class="tag">LLMs</span><span class="tag">Python</span><span class="tag">NLP</span><span class="tag">IBM CP4D</span><span class="tag">AI Agents</span></div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">Independent Researcher</div>
+          <div class="exp-company">NCSR Demokritos</div>
+        </div>
+        <div class="exp-date">Jan '25 – Present</div>
+      </div>
+      <div class="exp-desc">
+        <ul>
+          <li>Published peer-reviewed research on drug-drug interaction (DDI) prediction for lung cancer at IEEE CBMS 2025.</li>
+          <li>Chosen as one of the best papers and called for publishing a special issue version.</li>
+          <li>Built a disease-specific biomedical knowledge graph (375,707 nodes, 17.9M relationships) from PubMed and MEDLINE.</li>
+          <li>Developed a path-analysis ML approach (BLGPA) outperforming all graph embedding baselines (TransE, HoLE, RESCAL, DistMult).</li>
+        </ul>
+      </div>
+      <div class="exp-tags"><span class="tag">Knowledge Graphs</span><span class="tag">NLP</span><span class="tag">Biomedical AI</span><span class="tag">Neo4j</span><span class="tag">scikit-learn</span></div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">Business Intelligence Engineer</div>
+          <div class="exp-company">IntTrust S.A.</div>
+        </div>
+        <div class="exp-date">Jul '23 – Sep '23</div>
+      </div>
+      <div class="exp-desc">
+        <ul>
+          <li>Assisted in the development of the Data Warehouse for Credia Bank (formerly Attica Bank), and for GasLog (shipping company).</li>
+          <li>Developed a PowerBI report for water monitoring at Metlen's White Houses.</li>
+        </ul>
+      </div>
+      <div class="exp-tags"><span class="tag">Data Warehouse</span><span class="tag">PowerBI</span><span class="tag">SQL</span></div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div>
+          <div class="exp-role">Research & Informatics Soldier</div>
+          <div class="exp-company">Greek Military</div>
+        </div>
+        <div class="exp-date">Sep '22 – Jun '23</div>
+      </div>
+      <div class="exp-desc">
+        <ul>
+          <li>Helpdesk and sysadmin duties for a military Brigade and Military Hospital.</li>
+          <li>Trained doctors and nurses on a new clinical software system during nationwide healthcare digital transformation rollout.</li>
+        </ul>
+      </div>
+      <div class="exp-tags"><span class="tag">Sysadmin</span><span class="tag">Training</span><span class="tag">Digital Transformation</span></div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-header">
+      <div class="section-tag">03 // skills</div>
+      <div class="section-title">Capabilities</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-category">AI / NLP</div>
+        <div class="skill-items">
+          <div class="skill-item"><span class="skill-name">LLMs & Prompt Eng.</span><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Neural Networks</span><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">NLP / Transformers</span><div class="skill-bar"><div class="skill-fill" style="width:93%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">TensorFlow / Keras</span><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">AI Agents</span><div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div></div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-category">Engineering</div>
+        <div class="skill-items">
+          <div class="skill-item"><span class="skill-name">Python</span><div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">SQL & NoSQL</span><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">IBM CP4D</span><div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Neo4j</span><div class="skill-bar"><div class="skill-fill" style="width:72%"></div></div></div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-category">Business</div>
+        <div class="skill-items">
+          <div class="skill-item"><span class="skill-name">Strategy</span><div class="skill-bar"><div class="skill-fill" style="width:72%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Digital Transformation</span><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Finance & Operations</span><div class="skill-bar"><div class="skill-fill" style="width:68%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">Leadership</span><div class="skill-bar"><div class="skill-fill" style="width:82%"></div></div></div>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-category">Languages</div>
+        <div class="skill-items">
+          <div class="skill-item"><span class="skill-name">Greek</span><div class="skill-bar"><div class="skill-fill" style="width:100%"></div></div></div>
+          <div class="skill-item"><span class="skill-name">English</span><div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-header">
+      <div class="section-tag">04 // projects</div>
+      <div class="section-title">Featured Projects</div>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name">Medical Image Classification</div>
+          <a class="project-link" href="https://github.com/MariosVottas/Medical-Image-Classification" target="_blank">GitHub ↗</a>
+        </div>
+        <p class="project-desc">Deep learning system for automated medical image diagnosis. Classifies brain MRIs for tumour detection and chest X-rays for pneumonia screening. Built with convolutional neural networks to assist clinical decision-making.</p>
+        <div class="exp-tags"><span class="tag">CNN</span><span class="tag">TensorFlow</span><span class="tag">Medical AI</span><span class="tag">Image Classification</span></div>
+      </div>
+      <div class="project-card">
+        <div class="project-header">
+          <div class="project-name">DDI Prediction — Knowledge Graph</div>
+          <a class="project-link" href="https://github.com/MariosVottas/Predicting-Multi-Class-Drug-Drug-Interactions" target="_blank">GitHub ↗</a>
+        </div>
+        <p class="project-desc">End-to-end system for predicting drug-drug interactions using a biomedical literature knowledge graph. Outperforms graph embedding baselines. Includes a real-world list of novel DDI predictions not yet documented in DrugBank.</p>
+        <div class="exp-tags"><span class="tag">Knowledge Graphs</span><span class="tag">Neo4j</span><span class="tag">Random Forest</span><span class="tag">SMOTE</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-header">
+      <div class="section-tag">05 // education</div>
+      <div class="section-title">Education</div>
+    </div>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-degree">MBA — Full-time</div>
+        <div class="edu-school">University of Piraeus</div>
+        <div class="edu-year">Sep '25 – Present</div>
+        <div class="edu-badge">★ Vice-President of the class</div>
+        <div class="edu-note">Strategy · Digital Transformation · Finance · Operations · Marketing</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-degree">MSc in Data Science</div>
+        <div class="edu-school">NCSR Demokritos & University of Peloponnese</div>
+        <div class="edu-year">Sep '21 – Dec '24</div>
+        <div class="edu-note">Thesis: Drug-Drug Interaction Multiclass Prediction on Biomedical Literature Knowledge Graphs<br><br>Deep Learning · ML · NoSQL/SQL · AI Ethics · XAI</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-degree">BSc in Informatics & Telecommunications</div>
+        <div class="edu-school">University of Peloponnese</div>
+        <div class="edu-year">Sep '16 – Sep '21</div>
+        <div class="edu-note">Thesis: Maritime Data Collection and Storage System<br><br>Python · ElasticSearch · Data Mining · Data Structures · C</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH / PUBLICATIONS -->
+  <section id="research">
+    <div class="section-header">
+      <div class="section-tag">06 // research</div>
+      <div class="section-title">Publications</div>
+    </div>
+    <div class="pub-card">
+      <div class="pub-title">Predicting Multi-Class Drug-Drug Interactions Using a Disease-Specific Knowledge Graph</div>
+      <div class="pub-authors">Marios Vottas, Fotis Aisopos, Konstantinos Bougiatiotis, Anastasia Krithara</div>
+      <div class="pub-venue">IEEE CBMS 2025 — Computer-Based Medical Systems · DOI: 10.1109/CBMS65348.2025.00157</div>
+      <p class="pub-abstract">Constructs a lung-cancer-specific biomedical knowledge graph (375K nodes, 17.9M relationships) from PubMed/MEDLINE to predict five classes of drug-drug interactions. A path-analysis ML approach (BLGPA) outperforms TransE, HoLE, RESCAL and DistMult graph embeddings. Funded by EU Horizon 2020 SIMPATHIC project.</p>
+      <div class="pub-actions">
+        <a class="pub-btn pub-btn-doi" href="https://doi.ieeecomputersociety.org/10.1109/CBMS65348.2025.00157" target="_blank">DOI ↗</a>
+        <a class="pub-btn pub-btn-gh" href="https://github.com/MariosVottas/Predicting-Multi-Class-Drug-Drug-Interactions" target="_blank">Code ↗</a>
+        <span class="pub-status">● IEEE published</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="section-header">
+      <div class="section-tag">07 // certifications</div>
+      <div class="section-title">Certifications</div>
+    </div>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <div class="cert-name">TensorFlow for Deep Learning Bootcamp</div>
+        <div class="cert-issuer">Udemy</div>
+        <div class="cert-meta">Certificate No: UC-547dc983-9c92-4641-a1eb-6c87ae16f513</div>
+        <a class="cert-link" href="https://ude.my/UC-547dc983-9c92-4641-a1eb-6c87ae16f513" target="_blank">View certificate ↗</a>
+      </div>
+      <div class="cert-card">
+        <div class="cert-name">Python, LLMs & NLP Specialisations</div>
+        <div class="cert-issuer">Udemy</div>
+        <div class="cert-meta">18 courses · Topics: Python, LLMs, NLP, ML, Deep Learning</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI ASSISTANT -->
+  <section id="ai">
+    <div class="section-header">
+      <div class="section-tag">08 // ai assistant</div>
+      <div class="section-title">Ask Anything About Marios</div>
+    </div>
+    <div class="chat-container">
+      <div class="chat-header">
+        <div class="chat-avatar">◈</div>
+        <div style="flex:1">
+          <div class="chat-name">Marios's AI Assistant</div>
+          <div class="chat-status">● offline — under construction</div>
+        </div>
+      </div>
+      <div class="suggested-chips">
+        <div class="chip" onclick="askChip(this)">What did Marios do at Alpha Bank?</div>
+        <div class="chip" onclick="askChip(this)">Tell me about his IEEE paper</div>
+        <div class="chip" onclick="askChip(this)">What projects has he built?</div>
+        <div class="chip" onclick="askChip(this)">Why AI + MBA?</div>
+        <div class="chip" onclick="askChip(this)">Is he open to new roles?</div>
+        <div class="chip" onclick="askChip(this)">What are his key skills?</div>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg bot">
+          <div class="msg-icon">◈</div>
+          <div class="msg-bubble">Hi! I'm Marios's personal AI assistant. I know his full background — experience, research, projects, education and more. What would you like to know?</div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" id="chatInput" placeholder="Ask me anything about Marios..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+        <button class="chat-send" id="sendBtn" onclick="sendMsg()">send →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-header">
+      <div class="section-tag">09 // contact</div>
+      <div class="section-title">Let's Connect</div>
+    </div>
+    <div class="contact-grid">
+      <a class="contact-item" href="mailto:mariosvottas@gmail.com">
+        <div class="contact-icon">✉</div>
+        <div class="contact-label">Email</div>
+        <div class="contact-val">mariosvottas@gmail.com</div>
+      </a>
+      <a class="contact-item" href="https://www.linkedin.com/in/vottasmarios/" target="_blank">
+        <div class="contact-icon">in</div>
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-val">linkedin.com/in/vottasmarios</div>
+      </a>
+      <a class="contact-item" href="https://github.com/MariosVottas" target="_blank">
+        <div class="contact-icon">{}</div>
+        <div class="contact-label">GitHub</div>
+        <div class="contact-val">github.com/MariosVottas</div>
+      </a>
+      <div class="contact-item">
+        <div class="contact-icon">◎</div>
+        <div class="contact-label">Location</div>
+        <div class="contact-val">Athens, Greece</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span style="color:var(--accent)">MV_</span> &nbsp;·&nbsp; Marios Vottas &nbsp;·&nbsp; Data Scientist & AI Researcher &nbsp;·&nbsp; © 2026
+</footer>
+
+<script>
+const SYSTEM_PROMPT = `You are a personal AI assistant embedded on Marios Vottas's professional website. Answer questions about him concisely, professionally, and warmly — 2-5 sentences unless more detail is genuinely needed.
+
+== PERSONAL ==
+Full name: Marios Vottas
+Location: Athens, Greece
+Email: mariosvottas@gmail.com
+LinkedIn: https://www.linkedin.com/in/vottasmarios/
+GitHub: https://github.com/MariosVottas
+Currently open to new opportunities.
+
+== SUMMARY ==
+Data Scientist with a strong focus on NLP and Generative AI. Combines deep AI/analytics expertise with a collaborative, results-driven mindset. Passionate about innovation through emerging technologies. Currently bridging technical AI mastery with business strategy through a full-time MBA — and elected Vice-President of the class.
+
+== EXPERIENCE ==
+
+1. Alpha Bank — Data Scientist (Oct 2023 – Present)
+- Deployed Greece's first local zero-cost Llama-based LLM inside IBM's Cloud Pak for Data (CP4D) — a historic first in Greek banking.
+- Designed an automated reporting system delivering weekly customer complaint insights to C-Level executives and quarterly reports to ExCo.
+- Migrated, automated and currently maintains 20+ production ML models on cloud infrastructure.
+
+2. NCSR Demokritos — Independent Researcher (Jan 2025 – Present)
+- Published peer-reviewed research at IEEE CBMS 2025 on drug-drug interaction prediction using a biomedical knowledge graph.
+- Built a lung-cancer-specific knowledge graph with 375,707 nodes and 17.9 million relationships from PubMed and MEDLINE.
+- Developed the BLGPA method (path-analysis + Random Forest) which outperforms all graph embedding baselines tested (TransE, HoLE, RESCAL, DistMult).
+- Research funded by EU Horizon 2020 SIMPATHIC project (grant No 101080249).
+
+3. IntTrust S.A. — Business Intelligence Engineer (Jul 2023 – Sep 2023)
+- Assisted in developing the Data Warehouse for Credia Bank (formerly Attica Bank).
+- Developed a PowerBI report for water monitoring at Metlen's White Houses.
+
+4. Greek Military — Research and Informatics Soldier (Sep 2022 – Jun 2023)
+- Helpdesk and sysadmin duties for a military Brigade and Military Hospital.
+- Trained doctors and nurses on a new clinical software system, supporting nationwide healthcare digital transformation.
+
+== EDUCATION ==
+
+1. MBA Full-time — University of Piraeus (Sep 2025 – Present)
+   Elected Vice-President of the class.
+   Courses: Strategy, Finance, Operations, Digital Transformation, Marketing.
+
+2. MSc in Data Science — NCSR Demokritos & University of Peloponnese (Sep 2021 – Dec 2024)
+   Thesis: "Drug-Drug Interaction Multiclass Prediction on Biomedical Literature Knowledge Graphs"
+   Courses: Deep Learning, Machine Learning, NoSQL/SQL, AI Ethics.
+
+3. BSc in Informatics and Telecommunications — University of Peloponnese (Sep 2016 – Sep 2021)
+   Thesis: "Maritime Data Collection and Storage System"
+   Courses: Python, Databases, Data Mining, Data Structures, C.
+
+== RESEARCH & PUBLICATIONS ==
+
+Title: "Predicting Multi-Class Drug-Drug Interactions Using a Disease-Specific Knowledge Graph"
+Authors: Marios Vottas, Fotis Aisopos, Konstantinos Bougiatiotis, Anastasia Krithara
+Venue: IEEE CBMS 2025 (Computer-Based Medical Systems)
+DOI: 10.1109/CBMS65348.2025.00157
+Link: https://doi.ieeecomputersociety.org/10.1109/CBMS65348.2025.00157
+Code: https://github.com/MariosVottas/Predicting-Multi-Class-Drug-Drug-Interactions
+
+Summary: Constructed a disease-specific biomedical knowledge graph from PubMed/MEDLINE literature for lung cancer. Defined 5 classes of drug-drug interactions based on DrugBank taxonomy. The BLGPA path-analysis approach outperforms graph embedding methods. Produced a real-world list of novel DDI predictions not yet in DrugBank.
+
+== PROJECTS ==
+
+1. Medical Image Classification
+   GitHub: https://github.com/MariosVottas/Medical-Image-Classification
+   Deep learning system for medical imaging: brain MRI tumour detection + chest X-ray pneumonia classification. Built with CNNs using TensorFlow/Keras.
+
+2. DDI Prediction Knowledge Graph
+   GitHub: https://github.com/MariosVottas/Predicting-Multi-Class-Drug-Drug-Interactions
+   The research project above, also available as open-source code with experiments, predictions and full methodology.
+
+== SKILLS ==
+Technical: LLMs, Python (expert), Neural Networks, NLP, SQL, NoSQL, Knowledge Graphs, IBM CP4D, MLOps, Neo4j, TensorFlow, scikit-learn, PowerBI, Random Forest, SMOTE, graph embeddings (TransE, HoLE, RESCAL, DistMult)
+Soft: Teamwork, Problem Solving, Adaptability, Leadership, Critical Thinking
+Languages: Greek (native), English (professional)
+
+== CERTIFICATIONS ==
+- TensorFlow for Deep Learning Bootcamp (Udemy) — Certificate No: UC-547dc983-9c92-4641-a1eb-6c87ae16f513
+- 18 additional Udemy courses on Python, LLMs, NLP, ML, and Deep Learning (1-20 hours each)
+
+== WHY AI + MBA ==
+Marios believes the biggest untapped opportunity in AI is not just building the models — it's knowing how to deploy them strategically for measurable business impact. The MBA provides strategic, financial, and leadership frameworks that complement his deep technical AI expertise.
+
+== CAREER GOALS ==
+Aiming to lead AI strategy or AI product initiatives at a high-impact organisation, or eventually co-found an AI company. Focused on the intersection of AI and business: automation, decision intelligence, and NLP-driven insights in financial services, healthcare, or enterprise technology.
+
+== AVAILABILITY ==
+Open to: senior Data Scientist roles, AI/ML engineering, AI product/strategy, research collaborations.
+Best way to reach him: mariosvottas@gmail.com or LinkedIn.
+
+If asked something not covered above, say so honestly and suggest they reach out directly via email.`;
+
+const messages = [];
+
+function addMessage(role, text) {
+  const div = document.getElementById('chatMessages');
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + (role === 'user' ? 'user' : 'bot');
+  if (role !== 'user') {
+    msg.innerHTML = '<div class="msg-icon">◈</div><div class="msg-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
+  } else {
+    msg.innerHTML = '<div class="msg-bubble">' + text + '</div>';
+  }
+  div.appendChild(msg);
+  div.scrollTop = div.scrollHeight;
+}
+
+function addTyping() {
+  const div = document.getElementById('chatMessages');
+  const t = document.createElement('div');
+  t.className = 'msg bot'; t.id = 'typing';
+  t.innerHTML = '<div class="msg-icon">◈</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+  div.appendChild(t); div.scrollTop = div.scrollHeight;
+}
+
+function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+
+async function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const btn = document.getElementById('sendBtn');
+  const text = input.value.trim();
+  if (!text) return;
+  addMessage('user', text);
+  messages.push({ role: 'user', content: text });
+  input.value = ''; btn.disabled = true;
+  addTyping();
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': 'YOUR_ANTHROPIC_API_KEY_HERE',
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: messages
+      })
+    });
+    const data = await res.json();
+    const reply = (data.content && data.content[0]) ? data.content[0].text : 'Sorry, something went wrong. Please try again.';
+    removeTyping();
+    addMessage('bot', reply);
+    messages.push({ role: 'assistant', content: reply });
+  } catch(e) {
+    removeTyping();
+    addMessage('bot', 'Sorry, something went wrong. Please try again!');
+  }
+  btn.disabled = false;
+}
+
+function askChip(chip) { document.getElementById('chatInput').value = chip.textContent; sendMsg(); }
+</script>
+</body>
+</html>
